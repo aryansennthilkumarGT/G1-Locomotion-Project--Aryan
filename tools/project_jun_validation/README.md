@@ -36,3 +36,5 @@ python -m unittest discover -s tools/project_jun_validation -p 'test_*.py'
 ```
 
 RFT samples describe the latest callback output at control boundaries, not every physics substep or independently verified solver consumption. Trace files, checkpoint files, machine-specific launchers, credentials, and raw datasets are intentionally excluded from this public branch. Archive locations and access are managed separately.
+
+The reviewed `validate_heading_intervention.py` checks the ten quaternion history samples, finite trace values, timing, actor/action widths, command, terminal snapshot and summary metrics. Its formatted review copy is not byte-identical to the private PACE validation script used by dependent CPU job 7028537. The trace alone cannot prove unmodified actor inputs were unchanged, and this validator does not establish historical source equivalence or solver-consumed forces. CPU fixtures test accepted samples and rejection of incorrect heading or noncontiguous steps; live validation is pending the GPU parent.
