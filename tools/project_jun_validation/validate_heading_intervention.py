@@ -67,10 +67,13 @@ def summarize(directory, heading, expected_yaw):
                 break
             v = row["body_linear_velocity"][0][0]
             root = row["root_state"][0]
-            w, x, y, z = root[3:7]
+            x, y, z, w = root[3:7]
             values.append(v)
             heights.append(root[2])
-            tilts.append(math.acos(max(-1.0, min(1.0, 1.0 - 2.0 * (x * x + y * y)))))
+            norm = x * x + y * y + z * z + w * w
+            if abs(norm - 1.0) > 0.002:
+                raise ValueError("invalid root quaternion norm")
+            tilts.append(math.acos(max(-1.0, min(1.0, 1.0 - 2.0 * (x * x + y * y) / norm))))
     if not values or n > 1000:
         raise ValueError("no usable trajectory or overlong trace")
     windows = {}

@@ -31,12 +31,13 @@ class HeadingTraceTests(unittest.TestCase):
                 "terminated": [False],
                 "truncated": [False],
                 "body_linear_velocity": [[0.2, 0.0, 0.0]],
-                "root_state": [[0.0, 0.0, 0.7, 1.0, 0.0, 0.0, 0.0]],
+                "root_state": [[0.0, 0.0, 0.7, 0.0, 0.0, 0.7071067811865476, 0.7071067811865476]],
             }
             path = root / "trace.jsonl"
             path.write_text(json.dumps(row) + "\n")
             result = summarize(root, [1.0, 0.0, 0.0, 0.0], 3.0195081060393014)
             self.assertAlmostEqual(result["forward_rmse_m_s"], 0.2)
+            self.assertAlmostEqual(result["max_tilt_rad"], 0.0)
             row["policy_input"][0][63] = 0.0
             path.write_text(json.dumps(row) + "\n")
             with self.assertRaisesRegex(ValueError, "heading intervention"):
